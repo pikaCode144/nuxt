@@ -1,5 +1,6 @@
 <script setup>
 import { bulletinBoardAPI, newsExpressAPI } from '@/utils/posts'
+import { api } from '@/utils/ghostContentAPI'
 
 // 存储公告栏的数据
 const bulletinBoardRef = ref([])
@@ -7,9 +8,13 @@ const bulletinBoardRef = ref([])
 const newsExpressRef = ref([])
 onMounted(async () => {
   const [bulletinBoard, newsExpress] = await Promise.all([bulletinBoardAPI(), newsExpressAPI()])
-  bulletinBoardRef.value = bulletinBoard.map((post) => post.title)
-  newsExpressRef.value = newsExpress.map((post) => post.title)
+  console.log(bulletinBoard[0])
+  bulletinBoardRef.value = bulletinBoard
+  newsExpressRef.value = newsExpress
 })
+
+const router = useRouter()
+const toDetail = (id) => router.push({ path: '/detail', query: { id } })
 
 const title = ref([
   {
@@ -57,7 +62,7 @@ const introduce = ref([
             <v-card-text>
               <ul v-if="bulletinBoardRef.length">
                 <template v-for="bullentin in bulletinBoardRef" :key="bullentin">
-                  <li><p class="character">{{ bullentin }}</p></li>
+                  <li @click="toDetail(bullentin.id)"><p class="character">{{ bullentin.title }}</p></li>
                 </template>
               </ul>
             </v-card-text>
@@ -81,7 +86,7 @@ const introduce = ref([
             <v-card-text>
               <ul v-if="newsExpressRef.length">
                 <template v-for="newsExpress in newsExpressRef" :key="newsExpress">
-                  <li><p class="character">{{ newsExpress }}</p></li>
+                  <li @click="toDetail(newsExpress.id)"><p class="character">{{ newsExpress.title }}</p></li>
                 </template>
               </ul>
             </v-card-text>

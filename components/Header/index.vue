@@ -6,6 +6,9 @@ onMounted(async () => {
   const posts = await navBarsAPI()
   navBarsRef.value = posts.map((post) => post.title.split('/'))
 })
+
+const router = useRouter()
+const toHome = () => router.push({ path: '/' })
 </script>
 
 <template>
@@ -16,7 +19,7 @@ onMounted(async () => {
         justify="space-between"
       >
         <v-col cols="auto" align-self="center">
-          <v-spacer style="cursor: pointer;">
+          <v-spacer style="cursor: pointer;" @click="toHome">
             <v-img
               width="80"
               src="http://www.srtiu.cn/images/daohang.png"
