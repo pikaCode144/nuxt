@@ -6,15 +6,9 @@ const bulletinBoardRef = ref([])
 // 存储要问速递的数据
 const newsExpressRef = ref([])
 onMounted(async () => {
-  const res = await Promise.all(bulletinBoardAPI, newsExpressAPI)
-  console.log(res)
-  // bulletinBoardAPI.then((posts) => {
-  //   bulletinBoardRef.value = posts.map((post) => post.title)
-  // })
-  // newsExpressAPI.then((posts) => {
-  //   console.log(posts)
-  //   newsExpressRef.value = posts.map((post) => post.title)
-  // })
+  const [bulletinBoard, newsExpress] = await Promise.all([bulletinBoardAPI(), newsExpressAPI()])
+  bulletinBoardRef.value = bulletinBoard.map((post) => post.title)
+  newsExpressRef.value = newsExpress.map((post) => post.title)
 })
 
 const title = ref([
@@ -58,42 +52,42 @@ const introduce = ref([
   <div class="home">
     <v-container style="max-width: 1400px;">
       <v-row justify="center" align="center">
-      <v-col cols="4">
-        <v-card>
-          <v-card-text>
-            <ul v-if="bulletinBoardRef.length">
-              <template v-for="bullentin in bulletinBoardRef" :key="bullentin">
-                <li><p class="character">{{ bullentin }}</p></li>
-              </template>
-            </ul>
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col cols="4">
-        <v-card>
-          <v-card-text>
-            <div class="center-top">解码实验室</div>
-            <v-responsive>
-              <video controls style="width: 100%; height: 100%">
-                <source src="http://cloud.video.taobao.com/play/u/3459968589/p/1/e/6/t/1/50046750855.mp4"
-                  type="video/mp4" />
-              </video>
-            </v-responsive>
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col cols="4">
-        <v-card>
-          <v-card-text>
-            <ul v-if="newsExpressRef.length">
-              <template v-for="newsExpress in newsExpressRef" :key="newsExpress">
-                <li><p class="character">{{ newsExpress }}</p></li>
-              </template>
-            </ul>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+        <v-col cols="4">
+          <v-card>
+            <v-card-text>
+              <ul v-if="bulletinBoardRef.length">
+                <template v-for="bullentin in bulletinBoardRef" :key="bullentin">
+                  <li><p class="character">{{ bullentin }}</p></li>
+                </template>
+              </ul>
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col cols="4">
+          <v-card>
+            <v-card-text>
+              <div class="center-top">解码实验室</div>
+              <v-responsive>
+                <video controls style="width: 100%; height: 100%">
+                  <source src="http://cloud.video.taobao.com/play/u/3459968589/p/1/e/6/t/1/50046750855.mp4"
+                    type="video/mp4" />
+                </video>
+              </v-responsive>
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col cols="4">
+          <v-card>
+            <v-card-text>
+              <ul v-if="newsExpressRef.length">
+                <template v-for="newsExpress in newsExpressRef" :key="newsExpress">
+                  <li><p class="character">{{ newsExpress }}</p></li>
+                </template>
+              </ul>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
 
       <v-row>
         <v-col cols="12" md="4" v-for="i in introduce" :key="i">

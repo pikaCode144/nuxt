@@ -9,9 +9,9 @@ export const BannerAPI = async () => {
 }
 
 export const bulletinBoardAPI = async () => {
-  return api.posts.browse({ limit: 5, filter: 'tag:bulletin-board', order: 'published_at DESC' }).catch((err) => console.error(err))
+  return await api.posts.browse({ limit: 5, filter: 'tag:bulletin-board', order: 'published_at DESC' }).catch((err) => console.error(err))
 }
 
 export const newsExpressAPI = async () => {
-  return api.posts.browse({ limit: 5, fillter: 'tag:news-express', order: 'published_at DESC' }).catch((err) => console.error(err))
+  return await api.posts.browse({ limit: 5, filter: 'tag:news-express', order: 'published_at DESC' }).catch((err) => console.error(err))
 }
