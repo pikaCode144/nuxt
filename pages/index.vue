@@ -8,7 +8,6 @@ const bulletinBoardRef = ref([])
 const newsExpressRef = ref([])
 onMounted(async () => {
   const [bulletinBoard, newsExpress] = await Promise.all([bulletinBoardAPI(), newsExpressAPI()])
-  console.log(bulletinBoard[0])
   bulletinBoardRef.value = bulletinBoard
   newsExpressRef.value = newsExpress
 })
@@ -51,6 +50,8 @@ const introduce = ref([
     right: '查看更多>'
   },
 ])
+
+const toList = (index) => router.push({ path: '/list', query: { index } })
 </script>
 
 <template>
@@ -95,11 +96,11 @@ const introduce = ref([
       </v-row>
 
       <v-row>
-        <v-col cols="12" md="4" v-for="i in introduce" :key="i">
+        <v-col cols="12" md="4" v-for="(i, index) in introduce" :key="i">
           <div class="container" style="display: flex;justify-content: space-evenly;">
             <span class="left"> {{ i.left }}</span>
             <span class="center"> {{ i.center }}</span>
-            <span class="right"> {{ i.right }}</span>
+            <span class="right" @click="toList(index)"> {{ i.right }}</span>
           </div>
         </v-col>
       </v-row>

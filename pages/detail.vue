@@ -1,12 +1,13 @@
 <script setup>
+import { pageInfoAPI } from '@/utils/posts'
+
 const route = useRoute()
 const { id } = route.query
-console.log(id)
 const detailRef = ref({})
 onMounted(async () => {
-  const post = await api.posts.read({id})
-  console.log(post)
-  detailRef.value = post
+  const page = await pageInfoAPI(id)
+  console.log(page)
+  detailRef.value = page
 })
 
 </script>
