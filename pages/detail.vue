@@ -9,7 +9,6 @@ onMounted(async () => {
   const page = await postInfoAPI(id)
   detailRef.value = page
 })
-
 </script>
 
 <template>

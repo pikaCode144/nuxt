@@ -27,7 +27,7 @@ export const bulletinBoardAPI = async () => {
     .browse({
       limit: 5,
       filter: 'tag:bulletin-board',
-      order: 'published_at DESC'
+      order: 'published_at DESC',
     })
     .catch((err) => console.error(err))
 }
@@ -38,7 +38,7 @@ export const newsExpressAPI = async () => {
     .browse({
       limit: 5,
       filter: 'tag:news-express',
-      order: 'published_at DESC'
+      order: 'published_at DESC',
     })
     .catch((err) => console.error(err))
 }
@@ -51,18 +51,17 @@ export const postInfoAPI = async (id) => {
 // 按tag获取page数据
 export const tagPagesAPI = async (tag) => {
   return await api.pages
-  .browse({
-    filter: `tag:${tag}`,
-    order: 'published_at DESC'
-  })
-  .catch((err) => console.error(err))
+    .browse({
+      filter: `tag:${tag}`,
+      order: 'published_at DESC',
+    })
+    .catch((err) => console.error(err))
 }
 
 export const tagPostsAPI = async (tag, limit = 15) => {
-  return await api.posts
-  .browse({
+  return await api.posts.browse({
     limit,
     filter: `tag:${tag}`,
-    order: 'published_at DESC'
+    order: 'published_at DESC',
   })
 }

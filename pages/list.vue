@@ -1,6 +1,6 @@
 <script setup>
 import Banner from '@/components/Banner'
-import { navBarsAPI, tagPostsAPI } from '@/utils/posts'
+import { tagPostsAPI } from '@/utils/posts'
 import { formatDate } from '@/utils/format'
 
 const router = useRouter()
@@ -14,11 +14,15 @@ const asideDataRef = ref([])
 // 右边的列表
 const listDataRef = ref([])
 onMounted(async () => {
-  const [posts, pages] = await Promise.all([navBarsAPI(), tagPostsAPI(tag)])
-  asideDataRef.value = posts.map((post) => post.title.split('/'))
-                            .filter((post) => post.includes(title))[0]
-                            .map((str) => str.split('+'))
-  listDataRef.value = pages
+  const [navBars, posts] = await Promise.all([
+    tagPostsAPI('nav-bars'),
+    tagPostsAPI(tag),
+  ])
+  asideDataRef.value = navBars
+    .map((item) => item.title.split('/'))
+    .filter((item) => item.includes(title))[0]
+    .map((str) => str.split('+'))
+  listDataRef.value = posts
 })
 
 const toDetail = (id) => {
@@ -45,16 +49,12 @@ const changeName = async (info) => {
               <span class="circle2"></span>
               <span class="circle2"></span>
             </div>
-            <v-list
-              class="item"
-              color="#152f86"
-            > 
+            <v-list class="item" color="#152f86">
               <template v-for="list in asideDataRef.slice(1)" :key="list[1]">
                 <v-list-item
                   :active="nameRef === list[0]"
                   :title="list[0]"
-                  @click="changeName(list)"
-                ></v-list-item>
+                  @click="changeName(list)"></v-list-item>
               </template>
             </v-list>
           </v-card>
@@ -66,7 +66,10 @@ const changeName = async (info) => {
             <div class="subtitle1">{{ nameRef }}</div>
             <div class="vertical-line"></div>
           </div>
-          <div class="list" v-for="item in listDataRef" @click="toDetail(item.id)">
+          <div
+            class="list"
+            v-for="item in listDataRef"
+            @click="toDetail(item.id)">
             <div class="left">{{ formatDate(item.created_at) }}</div>
             <div class="right">{{ item.title }}</div>
           </div>
@@ -108,7 +111,6 @@ const changeName = async (info) => {
     font-size: 25px;
     font-weight: 600;
     color: rgb(21, 47, 134);
-
   }
 
   .vertical-line {
@@ -140,7 +142,6 @@ const changeName = async (info) => {
   }
 }
 
-
 .circle1::before {
   content: '';
   display: inline-block;
@@ -151,7 +152,6 @@ const changeName = async (info) => {
   background-color: rgb(23, 49, 142);
   margin-bottom: 1px;
   margin-left: 4px;
-
 }
 
 .circle2::before {
@@ -164,7 +164,6 @@ const changeName = async (info) => {
   background-color: rgb(23, 49, 142);
   margin-bottom: 3px;
   margin-left: 4px;
-
 }
 
 .circle3::before {
@@ -177,6 +176,5 @@ const changeName = async (info) => {
   background-color: rgb(23, 49, 142);
   margin-bottom: 4px;
   margin-left: 4px;
-
 }
 </style>

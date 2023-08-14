@@ -36,9 +36,9 @@
       </div>
     </div>
   </v-footer>
-  <!-- <v-footer color="#3c79b0" fixed dark height="80px" style="display: flex; justify-content: center">
+  <v-footer color="#3c79b0" fixed dark height="80px" style="display: flex; justify-content: center">
     <span>蜀公网安备 31010102006612号</span>
-  </v-footer> -->
+  </v-footer>
 </template>
 
 <style scoped lang="scss">

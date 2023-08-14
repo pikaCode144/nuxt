@@ -1,9 +1,9 @@
 <script setup>
-import { navBarsAPI } from '@/utils/posts'
+import { navBarsAPI, tagPostsAPI } from '@/utils/posts'
 // 获取导航栏数据
 const navBarsRef = ref([])
 onMounted(async () => {
-  const posts = await navBarsAPI()
+  const posts = await tagPostsAPI('nav-bars')
   navBarsRef.value = posts.map((post) => {
     const bar = post.title.split('/').map((str) => str.split('+'))
     return bar
@@ -14,17 +14,71 @@ const router = useRouter()
 const toHome = () => router.push({ path: '/' })
 
 const navigator = (bar, baz) => {
-  console.log(bar, baz)
+  let path = ''
   switch (bar) {
     case '公共服务':
+      switch (baz[1]) {
+        // 开放实验室预约
+        case 'open-laboratory-reservation':
+          path = '/open-laboratory-reservation'
+          break
+        // 仪表仪器共享
+        case 'shared-instruments-and-equipment':
+          path = '/shared-instruments-and-equipment'
+          break
+        // 技术咨询
+        case 'technical-consultation':
+          path = '/technical-consultation'
+          break
+        // 政策咨询
+        case 'policy-consultation':
+          path = '/policy-consultation'
+          break
+      }
+      router.push({
+        path,
+        query: { tag: baz[1] },
+      })
       break
     case '联盟中心':
+      switch (baz[1]) {
+        // 联盟简介
+        case 'alliance-introduction':
+          path = '/alliance-introduction'
+          break
+        // 联盟章程
+        case 'alliance-charter':
+          path = '/alliance-charter'
+          break
+        // 联盟成员
+        case 'alliance-members':
+          path = '/alliance-members'
+          break
+        // 加入我们
+        case 'join-us':
+          path = '/join-us'
+          break
+        // 成员中心
+        case 'member-center':
+          path = '/member-center'
+          break
+      }
+      router.push({
+        path,
+        query: { tag: baz[1] },
+      })
       break
     case '新闻中心':
-      console.log(bar)
-      router.push({ path: '/list', query: { title: bar, name: baz[0], tag: baz[1]  } })
+      router.push({
+        path: '/list',
+        query: { title: bar, name: baz[0], tag: baz[1] },
+      })
       break
     case '关于我们':
+      router.push({
+        path: '/about',
+        query: { title: bar, name: baz[0], tag: baz[1] },
+      })
       break
   }
 }
@@ -33,16 +87,12 @@ const navigator = (bar, baz) => {
 <template>
   <v-app-bar color="#152f86">
     <v-container class="header" fluid>
-      <v-row
-        class="content"
-        justify="space-between"
-      >
+      <v-row class="content" justify="space-between">
         <v-col cols="auto" align-self="center">
-          <v-spacer style="cursor: pointer;" @click="toHome">
+          <v-spacer style="cursor: pointer" @click="toHome">
             <v-img
               width="80"
-              src="http://www.srtiu.cn/images/daohang.png"
-            ></v-img>
+              src="http://www.srtiu.cn/images/daohang.png"></v-img>
           </v-spacer>
         </v-col>
 
@@ -56,9 +106,18 @@ const navigator = (bar, baz) => {
                       {{ navBars[0][0] }}
                     </v-btn>
                   </template>
-                  <v-list style="background-color:#4f68aa; color: #fff; text-align: start;">
-                    <template v-for="(navBar, index) in navBars.slice(1)" :key="navBars[0]">
-                      <v-list-item :value="navBars[index]" @click="navigator(navBars[0][0], navBar)">
+                  <v-list
+                    style="
+                      background-color: #4f68aa;
+                      color: #fff;
+                      text-align: start;
+                    ">
+                    <template
+                      v-for="(navBar, index) in navBars.slice(1)"
+                      :key="navBars[0]">
+                      <v-list-item
+                        :value="navBars[index]"
+                        @click="navigator(navBars[0][0], navBar)">
                         <v-list-item-title>{{ navBar[0] }}</v-list-item-title>
                       </v-list-item>
                     </template>
@@ -78,14 +137,12 @@ const navigator = (bar, baz) => {
               density="compact"
               base-color="#fff"
               bg-color="#fff"
-              color="primary"
-            ></v-text-field>
+              color="primary"></v-text-field>
           </v-spacer>
         </v-col>
       </v-row>
     </v-container>
   </v-app-bar>
-  
 </template>
 
 <style scoped lang="scss">
