@@ -7,10 +7,17 @@ export const navBarsAPI = async () => {
     .catch((err) => console.error(err))
 }
 
-// 获取轮播图的数据
-export const BannerAPI = async () => {
+// 获取轮播图、走马灯的数据
+export const carouselAPI = async () => {
   return await api.posts
-    .browse({ limit: 5, filter: 'tag:banner' })
+    .browse({ limit: 5, filter: 'tag:carousel' })
+    .catch((err) => console.error(err))
+}
+
+// 获取新闻中心的大图片
+export const newsCenterBanner = async () => {
+  return await api.posts
+    .browse({ limit: 5, filter: 'tag:news-center-banner' })
     .catch((err) => console.error(err))
 }
 

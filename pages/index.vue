@@ -1,6 +1,6 @@
 <script setup>
+import Carousel from '@/components/Carousel/index.vue'
 import { bulletinBoardAPI, newsExpressAPI } from '@/utils/posts'
-import { api } from '@/utils/ghostContentAPI'
 
 // 存储公告栏的数据
 const bulletinBoardRef = ref([])
@@ -56,9 +56,10 @@ const toList = (index) => router.push({ path: '/list', query: { index } })
 
 <template>
   <div class="home">
+    <Carousel />
     <v-container style="max-width: 1400px;">
       <v-row justify="center" align="center">
-        <v-col cols="4">
+        <v-col cols="4" md="4">
           <v-card>
             <v-card-text>
               <ul v-if="bulletinBoardRef.length">
@@ -69,7 +70,7 @@ const toList = (index) => router.push({ path: '/list', query: { index } })
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="4">
+        <v-col cols="4" md="4">
           <v-card>
             <v-card-text>
               <div class="center-top">解码实验室</div>
@@ -82,7 +83,7 @@ const toList = (index) => router.push({ path: '/list', query: { index } })
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="4">
+        <v-col cols="4" md="4">
           <v-card>
             <v-card-text>
               <ul v-if="newsExpressRef.length">

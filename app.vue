@@ -1,19 +1,15 @@
 <script setup>
 import Header from '@/components/Header/index.vue'
-import Banner from '@/components/Banner/index.vue'
 import Footer from '@/components/Footer/index.vue'
 </script>
 
 <template>
   <div>
-    <v-layout class="rounded rounded-md app-layout">
+    <v-app style="margin-top: 60px;">
       <Header />
-      <v-main class="d-flex align-center justify-center app-main">
-        <Banner />
-        <NuxtPage />
-      </v-main>
+      <NuxtPage />
       <Footer />
-    </v-layout>
+    </v-app>
   </div>
 </template>
 

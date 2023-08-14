@@ -2,50 +2,46 @@
 
 <template>
   <v-footer color="#fff" fixed dark>
-    <v-layout justify-center row wrap>
-      <div class="footer">
-        <div class="footer-container">
-          <div class="left">
-            <div class="top">
-              <img
-                style="width: 86px"
-                src="http://www.srtiu.cn/images/brand2.png"
-                alt="" />
-            </div>
-            <div class="center">
-              <div>联系我们</div>
-              <div class="circle1"></div>
-              <div class="circle2"></div>
-              <div class="circle3"></div>
-            </div>
-            <div class="bottom">123-123-123</div>
+    <div class="footer">
+      <div class="footer-container">
+        <div class="left">
+          <div class="top">
+            <img
+              style="width: 86px"
+              src="http://www.srtiu.cn/images/brand2.png"
+              alt="" />
           </div>
-        </div>
-        <div class="footer-container">
-          <div class="left">
-            <div class="bottom">srtiu@srtiu.cn</div>
+          <div class="center">
+            <div>联系我们</div>
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
           </div>
-        </div>
-        <div class="footer-container">
-          <div class="left">
-            <div class="center">
-              <img src="http://www.srtiu.cn/images/erweima.jpg" alt="" />
-              <img src="http://www.srtiu.cn/images/erweima.jpg" alt="" />
-            </div>
-            <div class="bottom">成都市锦江区</div>
-          </div>
+          <div class="bottom">123-123-123</div>
         </div>
       </div>
-    </v-layout>
+      <div class="footer-container">
+        <div class="left">
+          <div class="bottom">srtiu@srtiu.cn</div>
+        </div>
+      </div>
+      <div class="footer-container">
+        <div class="left">
+          <div class="center">
+            <img src="http://www.srtiu.cn/images/erweima.jpg" alt="" />
+            <img src="http://www.srtiu.cn/images/erweima.jpg" alt="" />
+          </div>
+          <div class="bottom">成都市锦江区</div>
+        </div>
+      </div>
+    </div>
   </v-footer>
-  <v-footer color="#3c79b0" fixed dark height="80px">
-    <v-layout style="display: flex; justify-content: center">
-      <span>蜀公网安备 31010102006612号</span>
-    </v-layout>
-  </v-footer>
+  <!-- <v-footer color="#3c79b0" fixed dark height="80px" style="display: flex; justify-content: center">
+    <span>蜀公网安备 31010102006612号</span>
+  </v-footer> -->
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .footer {
   width: 100vw;
   display: flex;

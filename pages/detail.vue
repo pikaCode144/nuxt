@@ -1,4 +1,5 @@
 <script setup>
+import Banner from '@/components/Banner/index.vue'
 import { pageInfoAPI } from '@/utils/posts'
 
 const route = useRoute()
@@ -6,18 +7,27 @@ const { id } = route.query
 const detailRef = ref({})
 onMounted(async () => {
   const page = await pageInfoAPI(id)
-  console.log(page)
   detailRef.value = page
 })
 
 </script>
 
 <template>
-  <v-container style="max-width: 1400px;" class="detail">
-    <div v-if="detailRef.title" v-html="detailRef.html"></div>
-  </v-container>
+  <Banner />
+  <div class="detail">
+    <div class="inner" v-if="detailRef.title" v-html="detailRef.html"></div>
+  </div>
 </template>
 
 <style scoped lang="scss">
+.detail {
+  display: flex;
+  justify-content: center;
+  max-width: 1400px;
 
+  .inner {
+    max-width: 900px;
+    padding: 40px 0;
+  }
+}
 </style>

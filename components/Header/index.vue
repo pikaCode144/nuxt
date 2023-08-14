@@ -36,7 +36,7 @@ const toHome = () => router.push({ path: '/' })
                       {{ navBars[0] }}
                     </v-btn>
                   </template>
-                  <v-list style="background-color:#4f68aa;color: #fff;text-align: start;">
+                  <v-list style="background-color:#4f68aa; color: #fff; text-align: start;">
                     <template v-for="(navBar, index) in navBars" :key="navBars[0]">
                       <v-list-item v-if="index > 0" :value="navBars[index]">
                         <v-list-item-title>{{ navBar }}</v-list-item-title>
