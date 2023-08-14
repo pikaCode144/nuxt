@@ -1,70 +1,54 @@
 <script setup>
 import Carousel from '@/components/Carousel/index.vue'
-import { bulletinBoardAPI, newsExpressAPI } from '@/utils/posts'
+import { bulletinBoardAPI, newsExpressAPI, tagPostsAPI } from '@/utils/posts'
+import { formatDate } from '@/utils/format'
 
-// 存储公告栏的数据
-const bulletinBoardRef = ref([])
-// 存储要问速递的数据
-const newsExpressRef = ref([])
-onMounted(async () => {
-  const [bulletinBoard, newsExpress] = await Promise.all([bulletinBoardAPI(), newsExpressAPI()])
-  bulletinBoardRef.value = bulletinBoard
-  newsExpressRef.value = newsExpress
-})
-
+// 动态路由跳转
 const router = useRouter()
+
+// 视频左边的数据
+const leftRef = ref([])
+// 视频右边的数据
+const rightRef = ref([])
+// 三栏的布局
+const threeColRef = ref([])
+// 公共服务数据
+const publicServiceRef = ref([])
+
+// 去详情页面
 const toDetail = (id) => router.push({ path: '/detail', query: { id } })
 
-const title = ref([
-  {
-    title: '开放实验室预约',
-    info: '为中小企业提供无线通信测试所需的免费仪器仪表使用和现场技术支持。'
-  },
-  {
-    title: '仪器仪表共享',
-    info: ' 为中小企业在研发过程中的测试需求提供无线通信仪表的免费共享和使用。'
-  },
-  {
-    title: '技术咨询',
-    info: ' 针对无线通信领域的认证测试技术问题进行答疑和讨论。'
-  },
-  {
-    title: '政策咨询',
-    info: '为中小企业提供无线通信测试所需的免费仪器仪表使用和现场技术支持。'
-  }
-])
-const introduce = ref([
-  {
-    left: '公告栏',
-    center: '2023-2-2',
-    right: '查看更多>'
-  },
-  {
-    left: '工作动态',
-    center: '',
-    right: '查看更多>'
-  },
-  {
-    left: '要问速递',
-    center: '2023-2-2',
-    right: '查看更多>'
-  },
-])
+// 去查看更多页面
+const toList = (name, tag) => router.push({ path: '/list', query: { title: '新闻中心', name, tag } })
 
-const toList = (index) => router.push({ path: '/list', query: { index } })
+onMounted(async () => {
+  // 同时获取三栏布局和公共服务数据
+  const [threeCol, publicService] = await Promise.all([tagPostsAPI('three-col'), tagPostsAPI('public-service')])
+  // 存储公共服务数据
+  publicServiceRef.value = publicService
+  const arr = threeCol[0].title.split('/').map((item) => item.split('+'))
+  const [left, right] = await Promise.all([tagPostsAPI(arr[0][1]), tagPostsAPI(arr[2][1])])
+  arr[0].push(formatDate(left[0].created_at))
+  arr[1].push('')
+  arr[2].push(formatDate(right[0].created_at))
+  threeColRef.value = arr
+  leftRef.value = left
+  rightRef.value = right
+})
 </script>
 
 <template>
   <div class="home">
     <Carousel />
     <v-container style="max-width: 1400px;">
+      <!-- 三栏 -->
       <v-row justify="center" align="center">
         <v-col cols="4" md="4">
           <v-card>
             <v-card-text>
-              <ul v-if="bulletinBoardRef.length">
-                <template v-for="bullentin in bulletinBoardRef" :key="bullentin">
-                  <li @click="toDetail(bullentin.id)"><p class="character">{{ bullentin.title }}</p></li>
+              <ul v-if="leftRef.length">
+                <template v-for="left in leftRef" :key="left">
+                  <li @click="toDetail(left.id)"><p class="character">{{ left.title }}</p></li>
                 </template>
               </ul>
             </v-card-text>
@@ -86,9 +70,9 @@ const toList = (index) => router.push({ path: '/list', query: { index } })
         <v-col cols="4" md="4">
           <v-card>
             <v-card-text>
-              <ul v-if="newsExpressRef.length">
-                <template v-for="newsExpress in newsExpressRef" :key="newsExpress">
-                  <li @click="toDetail(newsExpress.id)"><p class="character">{{ newsExpress.title }}</p></li>
+              <ul v-if="rightRef.length">
+                <template v-for="right in rightRef" :key="right">
+                  <li @click="toDetail(right.id)"><p class="character">{{ right.title }}</p></li>
                 </template>
               </ul>
             </v-card-text>
@@ -96,16 +80,20 @@ const toList = (index) => router.push({ path: '/list', query: { index } })
         </v-col>
       </v-row>
 
-      <v-row>
-        <v-col cols="12" md="4" v-for="(i, index) in introduce" :key="i">
-          <div class="container" style="display: flex;justify-content: space-evenly;">
-            <span class="left"> {{ i.left }}</span>
-            <span class="center"> {{ i.center }}</span>
-            <span class="right" @click="toList(index)"> {{ i.right }}</span>
-          </div>
-        </v-col>
+      <!-- 查看更多 -->
+      <v-row v-if="threeColRef.length">
+        <template v-for="(item, index) in threeColRef" :key="item[0]">
+          <v-col cols="12" md="4">
+            <div class="container" style="display: flex; justify-content: space-evenly;">
+              <span class="left"> {{ item[0] }}</span>
+              <span class="center"> {{ item[2] }}</span>
+              <span class="right" @click="toList(item[0], item[1])">查看更多></span>
+            </div>
+          </v-col>
+        </template>
       </v-row>
 
+      <!-- 公共服务 -->
       <v-row>
         <v-col cols="12" class="subTitle">
           <div class="circle3"></div>
@@ -117,12 +105,11 @@ const toList = (index) => router.push({ path: '/list', query: { index } })
           <div class="circle3"></div>
         </v-col>
       </v-row>
-
       <v-row>
-        <v-col cols="12" md="3" v-for="item in title" :key="item">
+        <v-col cols="12" md="3" v-for="item in publicServiceRef" :key="item">
           <v-card class="boxInfo">
-            <v-card-title class="title"> {{ item.title }}</v-card-title>
-            <v-card-text class="info">{{ item.info }}</v-card-text>
+            <v-card-title class="title">{{ item.title }}</v-card-title>
+            <v-card-text class="info" v-html="item.html"></v-card-text>
             <v-btn class="btn" color="medium-emphasis" min-width="92" rounded variant="outlined">
               查看详情
             </v-btn>
@@ -267,8 +254,7 @@ const toList = (index) => router.push({ path: '/list', query: { index } })
 
     .info {
       width: 86%;
-      margin: 0 auto;
-      text-indent: 1.5em;
+      margin: 20px auto 0;
     }
 
     .btn {

@@ -1,12 +1,11 @@
 <script setup>
 import Banner from '@/components/Banner'
-import { navBarsAPI, tagsAPI } from '@/utils/posts'
+import { navBarsAPI, tagPostsAPI } from '@/utils/posts'
 import { formatDate } from '@/utils/format'
 
 const router = useRouter()
 const route = useRoute()
-const { index, title, name, tag } = route.query
-console.log(title, name, tag)
+const { title, name, tag } = route.query
 
 // 小标题
 const nameRef = ref(name)
@@ -15,12 +14,11 @@ const asideDataRef = ref([])
 // 右边的列表
 const listDataRef = ref([])
 onMounted(async () => {
-  const [posts, pages] = await Promise.all([navBarsAPI(), tagsAPI(tag)])
+  const [posts, pages] = await Promise.all([navBarsAPI(), tagPostsAPI(tag)])
   asideDataRef.value = posts.map((post) => post.title.split('/'))
                             .filter((post) => post.includes(title))[0]
                             .map((str) => str.split('+'))
   listDataRef.value = pages
-  console.log(asideDataRef.value.slice(1))
 })
 
 const toDetail = (id) => {
@@ -29,7 +27,7 @@ const toDetail = (id) => {
 
 const changeName = async (info) => {
   nameRef.value = info[0]
-  const pages = await tagsAPI(info[1])
+  const pages = await tagPostsAPI(info[1])
   listDataRef.value = pages
 }
 </script>

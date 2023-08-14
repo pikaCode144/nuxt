@@ -1,12 +1,12 @@
 <script setup>
 import Banner from '@/components/Banner/index.vue'
-import { pageInfoAPI } from '@/utils/posts'
+import { postInfoAPI } from '@/utils/posts'
 
 const route = useRoute()
 const { id } = route.query
 const detailRef = ref({})
 onMounted(async () => {
-  const page = await pageInfoAPI(id)
+  const page = await postInfoAPI(id)
   detailRef.value = page
 })
 
