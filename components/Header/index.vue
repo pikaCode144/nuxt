@@ -4,11 +4,30 @@ import { navBarsAPI } from '@/utils/posts'
 const navBarsRef = ref([])
 onMounted(async () => {
   const posts = await navBarsAPI()
-  navBarsRef.value = posts.map((post) => post.title.split('/'))
+  navBarsRef.value = posts.map((post) => {
+    const bar = post.title.split('/').map((str) => str.split('+'))
+    return bar
+  })
 })
 
 const router = useRouter()
 const toHome = () => router.push({ path: '/' })
+
+const navigator = (bar, baz) => {
+  console.log(bar, baz)
+  switch (bar) {
+    case '公共服务':
+      break
+    case '联盟中心':
+      break
+    case '新闻中心':
+      console.log(bar)
+      router.push({ path: '/list', query: { title: bar, name: baz[0], tag: baz[1]  } })
+      break
+    case '关于我们':
+      break
+  }
+}
 </script>
 
 <template>
@@ -26,6 +45,7 @@ const toHome = () => router.push({ path: '/' })
             ></v-img>
           </v-spacer>
         </v-col>
+
         <v-col cols="auto" align-self="center">
           <v-spacer class="section">
             <template v-for="navBars in navBarsRef" :key="navBars[0]">
@@ -33,13 +53,13 @@ const toHome = () => router.push({ path: '/' })
                 <v-menu open-on-hover>
                   <template v-slot:activator="{ props }">
                     <v-btn class="menu-item-title" v-bind="props">
-                      {{ navBars[0] }}
+                      {{ navBars[0][0] }}
                     </v-btn>
                   </template>
                   <v-list style="background-color:#4f68aa; color: #fff; text-align: start;">
-                    <template v-for="(navBar, index) in navBars" :key="navBars[0]">
-                      <v-list-item v-if="index > 0" :value="navBars[index]">
-                        <v-list-item-title>{{ navBar }}</v-list-item-title>
+                    <template v-for="(navBar, index) in navBars.slice(1)" :key="navBars[0]">
+                      <v-list-item :value="navBars[index]" @click="navigator(navBars[0][0], navBar)">
+                        <v-list-item-title>{{ navBar[0] }}</v-list-item-title>
                       </v-list-item>
                     </template>
                   </v-list>
@@ -48,6 +68,7 @@ const toHome = () => router.push({ path: '/' })
             </template>
           </v-spacer>
         </v-col>
+
         <v-col cols="auto" align-self="center">
           <v-spacer>
             <v-text-field

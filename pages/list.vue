@@ -1,81 +1,37 @@
 <script setup>
 import Banner from '@/components/Banner'
+import { navBarsAPI, tagsAPI } from '@/utils/posts'
+import { formatDate } from '@/utils/format'
+
+const router = useRouter()
 const route = useRoute()
-const { index } = route.query
+const { index, title, name, tag } = route.query
+console.log(title, name, tag)
 
-const items = ref([
-  {
-    name: '公告栏',
-    id: 1,
-  },
-  {
-    name: '工作动态',
-    id: 2,
-  },
-  {
-    name: '要闻速递',
-    id: 3,
-  },
-  {
-    name: '行业新闻',
-    id: 4,
-  }
-])
+// 小标题
+const nameRef = ref(name)
+// 保存侧边栏里的数据
+const asideDataRef = ref([])
+// 右边的列表
+const listDataRef = ref([])
+onMounted(async () => {
+  const [posts, pages] = await Promise.all([navBarsAPI(), tagsAPI(tag)])
+  asideDataRef.value = posts.map((post) => post.title.split('/'))
+                            .filter((post) => post.includes(title))[0]
+                            .map((str) => str.split('+'))
+  listDataRef.value = pages
+  console.log(asideDataRef.value.slice(1))
+})
 
-const infoList = ref([
-  {
-    day: '21',
-    month: 'Feb.',
-    info: '“筑牢数字底座 助力质量提升系列交流活动（第一期）'
-  },
-  {
-    day: '22',
-    month: 'Aug.',
-    info: '<<上海无线电>>专刊征稿通知'
-  },
-  {
-    day: '23',
-    month: 'Jan.',
-    info: '“成都大运会开始'
-  },
-  {
-    day: '24',
-    month: 'Feb.',
-    info: '“今天中午吃啥'
-  },
-  {
-    day: '24',
-    month: 'Feb.',
-    info: '“今天中午吃啥'
-  },
-  {
-    day: '24',
-    month: 'Feb.',
-    info: '“今天中午吃啥'
-  },
-  {
-    day: '24',
-    month: 'Feb.',
-    info: '“今天中午吃啥'
-  },
-  {
-    day: '24',
-    month: 'Feb.',
-    info: '“今天中午吃啥'
-  },
-  {
-    day: '24',
-    month: 'Feb.',
-    info: '“今天中午吃啥'
-  },
-  {
-    day: '24',
-    month: 'Feb.',
-    info: '“今天中午吃啥'
-  },
+const toDetail = (id) => {
+  router.push({ path: '/detail', query: { id } })
+}
 
-])
-
+const changeName = async (info) => {
+  nameRef.value = info[0]
+  const pages = await tagsAPI(info[1])
+  listDataRef.value = pages
+}
 </script>
 
 <template>
@@ -84,29 +40,37 @@ const infoList = ref([
     <v-row no-gutters>
       <v-col cols="3">
         <v-sheet class="pa-2 ma-2">
-          <v-card class="mx-auto card">
+          <v-card class="mx-auto card" v-if="asideDataRef.length">
             <div class="title">
-              <span class="subtitle">新闻中心</span>
+              <span class="subtitle">{{ asideDataRef[0][0] }}</span>
               <span class="circle1"></span>
               <span class="circle2"></span>
               <span class="circle2"></span>
             </div>
-            <v-list class="item" :items="items" item-title="name" item-value="id"></v-list>
+            <v-list
+              class="item"
+              color="#152f86"
+            > 
+              <template v-for="list in asideDataRef.slice(1)" :key="list[1]">
+                <v-list-item
+                  :active="nameRef === list[0]"
+                  :title="list[0]"
+                  @click="changeName(list)"
+                ></v-list-item>
+              </template>
+            </v-list>
           </v-card>
         </v-sheet>
       </v-col>
       <v-col cols="9">
-        <v-sheet class="pa-2 ma-2" style="height: 800px;overflow-y: hidden;">
+        <v-sheet class="pa-2 ma-2">
           <div class="title1">
-            <div class="subtitle1">公告栏</div>
+            <div class="subtitle1">{{ nameRef }}</div>
             <div class="vertical-line"></div>
           </div>
-          <div class="list" v-for="item in infoList">
-            <div class="left">
-              <div class="top">{{ item.day }}</div>
-              <div class="bottom">{{ item.month }}</div>
-            </div>
-            <div class="right">{{ item.info }}</div>
+          <div class="list" v-for="item in listDataRef" @click="toDetail(item.id)">
+            <div class="left">{{ formatDate(item.created_at) }}</div>
+            <div class="right">{{ item.title }}</div>
           </div>
         </v-sheet>
       </v-col>
@@ -117,7 +81,7 @@ const infoList = ref([
 <style scoped lang="scss">
 .card {
   width: 200px;
-  height: 400px;
+  /* height: 400px; */
   text-align: center;
 
   .item :hover {
@@ -135,9 +99,6 @@ const infoList = ref([
     color: rgb(23, 49, 142);
     font-weight: 600;
   }
-
-
-
 }
 
 .title1 {
@@ -161,31 +122,22 @@ const infoList = ref([
 .list {
   display: flex;
   margin-top: 30px;
+  cursor: pointer;
 
   .left {
-    .top {
-      width: 45px;
-      height: 46px;
-      background-color: #eabd30;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #fff;
-      font-size: 21px;
-    }
-
-    .bottom {
-      height: 28px;
-      background-color: #152f86;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+    width: auto;
+    height: 46px;
+    background-color: #eabd30;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+    color: #fff;
+    font-size: 21px;
   }
 
   .right {
-    line-height: 70px;
+    line-height: 46px;
     margin-left: 40px;
   }
 }

@@ -47,3 +47,13 @@ export const newsExpressAPI = async () => {
 export const pageInfoAPI = async (id) => {
   return await api.pages.read({ id }).catch((err) => console.error(err))
 }
+
+// 按tag获取数据
+export const tagsAPI = async (tag) => {
+  return await api.pages
+  .browse({
+    filter: `tag:${tag}`,
+    order: 'published_at DESC',
+  })
+  .catch((err) => console.error(err))
+}
