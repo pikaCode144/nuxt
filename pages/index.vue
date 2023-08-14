@@ -51,6 +51,21 @@ const introduce = ref([
   },
 ])
 
+const imgUrl = ref([
+  { url: 'http://www.srtiu.cn/images/comlogo1.png' },
+  { url: 'http://www.srtiu.cn/images/comlogo2.png' },
+  { url: 'http://www.srtiu.cn/images/comlogo3.png' },
+  { url: 'http://www.srtiu.cn/images/comlogo4.png' },
+  { url: 'http://www.srtiu.cn/images/comlogo1.png' },
+  { url: 'http://www.srtiu.cn/images/comlogo2.png' },
+  { url: 'http://www.srtiu.cn/images/comlogo3.png' },
+  { url: 'http://www.srtiu.cn/images/comlogo4.png' },
+  { url: 'http://www.srtiu.cn/images/comlogo1.png' },
+  { url: 'http://www.srtiu.cn/images/comlogo2.png' },
+  { url: 'http://www.srtiu.cn/images/comlogo3.png' },
+  { url: 'http://www.srtiu.cn/images/comlogo4.png' }
+])
+
 const toList = (index) => router.push({ path: '/list', query: { index } })
 </script>
 
@@ -64,7 +79,9 @@ const toList = (index) => router.push({ path: '/list', query: { index } })
             <v-card-text>
               <ul v-if="bulletinBoardRef.length">
                 <template v-for="bullentin in bulletinBoardRef" :key="bullentin">
-                  <li @click="toDetail(bullentin.id)"><p class="character">{{ bullentin.title }}</p></li>
+                  <li @click="toDetail(bullentin.id)">
+                    <p class="character">{{ bullentin.title }}</p>
+                  </li>
                 </template>
               </ul>
             </v-card-text>
@@ -88,7 +105,9 @@ const toList = (index) => router.push({ path: '/list', query: { index } })
             <v-card-text>
               <ul v-if="newsExpressRef.length">
                 <template v-for="newsExpress in newsExpressRef" :key="newsExpress">
-                  <li @click="toDetail(newsExpress.id)"><p class="character">{{ newsExpress.title }}</p></li>
+                  <li @click="toDetail(newsExpress.id)">
+                    <p class="character">{{ newsExpress.title }}</p>
+                  </li>
                 </template>
               </ul>
             </v-card-text>
@@ -126,6 +145,26 @@ const toList = (index) => router.push({ path: '/list', query: { index } })
             <v-btn class="btn" color="medium-emphasis" min-width="92" rounded variant="outlined">
               查看详情
             </v-btn>
+          </v-card>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col cols="12" class="subTitle">
+          <div class="circle3"></div>
+          <div class="circle2"></div>
+          <div class="circle1"></div>
+          <div>联盟服务</div>
+          <div class="circle1"></div>
+          <div class="circle2"></div>
+          <div class="circle3"></div>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col cols="12" md="3" v-for="item in imgUrl" :key="item">
+          <v-card class="imgBox">
+            <img :src="item.url" alt="">
           </v-card>
         </v-col>
       </v-row>
@@ -276,6 +315,14 @@ const toList = (index) => router.push({ path: '/list', query: { index } })
       margin: 0 auto;
       margin-bottom: 30px;
     }
+  }
+
+  .imgBox {
+    height: 160px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
   }
 }
 </style>
