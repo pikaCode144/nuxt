@@ -1,11 +1,14 @@
 <script setup>
-import { newsCenterBanner } from '@/utils/posts'
+import { newsCenterBanner, fetchGhostPosts } from '@/utils/posts'
 // 获取轮播图的数据
 const bannersRef = ref([])
-onMounted(async () => {
-  const posts = await newsCenterBanner()
-  bannersRef.value = posts[0].title
-})
+
+const posts = await fetchGhostPosts('news-center-banner')
+bannersRef.value = posts.data.value.posts[0].title
+// onMounted(async () => {
+//   const posts = await newsCenterBanner()
+//   bannersRef.value = posts[0].title
+// })
 </script>
 
 <template>

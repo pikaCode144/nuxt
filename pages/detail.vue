@@ -1,14 +1,17 @@
 <script setup>
 import Banner from '@/components/Banner/index.vue'
-import { postInfoAPI } from '@/utils/posts'
+import { postInfoAPI, fetchGhostPosts } from '@/utils/posts'
 
 const route = useRoute()
 const { id } = route.query
 const detailRef = ref({})
-onMounted(async () => {
-  const page = await postInfoAPI(id)
-  detailRef.value = page
-})
+
+const page = await postInfoAPI(id)
+detailRef.value = page.data.value.posts[0]
+// onMounted(async () => {
+//   const page = await postInfoAPI(id)
+//   detailRef.value = page
+// })
 </script>
 
 <template>

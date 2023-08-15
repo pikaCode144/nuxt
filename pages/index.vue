@@ -1,6 +1,6 @@
 <script setup>
 import Carousel from '@/components/Carousel/index.vue'
-import { bulletinBoardAPI, newsExpressAPI, tagPostsAPI } from '@/utils/posts'
+import { bulletinBoardAPI, newsExpressAPI, tagPostsAPI, fetchGhostPosts } from '@/utils/posts'
 import { formatDate } from '@/utils/format'
 
 // 动态路由跳转
@@ -22,26 +22,46 @@ const toDetail = (id) => router.push({ path: '/detail', query: { id } })
 const toList = (name, tag) =>
   router.push({ path: '/list', query: { title: '新闻中心', name, tag } })
 
-onMounted(async () => {
-  // 同时获取三栏布局和公共服务数据
-  const [threeCol, publicService] = await Promise.all([
-    tagPostsAPI('three-col'),
-    tagPostsAPI('public-service'),
-  ])
-  // 存储公共服务数据
-  publicServiceRef.value = publicService
-  const arr = threeCol[0].title.split('/').map((item) => item.split('+'))
-  const [left, right] = await Promise.all([
-    tagPostsAPI(arr[0][1]),
-    tagPostsAPI(arr[2][1]),
-  ])
-  arr[0].push(formatDate(left[0].created_at))
-  arr[1].push('')
-  arr[2].push(formatDate(right[0].created_at))
-  threeColRef.value = arr
-  leftRef.value = left
-  rightRef.value = right
-})
+// 同时获取三栏布局和公共服务数据
+const [threeCol, publicService] = await Promise.all([
+  fetchGhostPosts('three-col'),
+  fetchGhostPosts('public-service'),
+])
+
+// 存储公共服务数据
+publicServiceRef.value = publicService.data.value.posts
+const arr = threeCol.data.value.posts[0].title.split('/').map((item) => item.split('+'))
+const [left, right] = await Promise.all([
+  fetchGhostPosts(arr[0][1]),
+  fetchGhostPosts(arr[2][1])
+])
+arr[0].push(formatDate(left.data.value.posts[0].created_at))
+arr[1].push('')
+arr[2].push(formatDate(right.data.value.posts[0].created_at))
+threeColRef.value = arr
+leftRef.value = left.data.value.posts
+rightRef.value = right.data.value.posts
+  
+// onMounted(async () => {
+//   // 同时获取三栏布局和公共服务数据
+//   const [threeCol, publicService] = await Promise.all([
+//     tagPostsAPI('three-col'),
+//     tagPostsAPI('public-service'),
+//   ])
+//   // 存储公共服务数据
+//   publicServiceRef.value = publicService
+//   const arr = threeCol[0].title.split('/').map((item) => item.split('+'))
+//   const [left, right] = await Promise.all([
+//     tagPostsAPI(arr[0][1]),
+//     tagPostsAPI(arr[2][1]),
+//   ])
+//   arr[0].push(formatDate(left[0].created_at))
+//   arr[1].push('')
+//   arr[2].push(formatDate(right[0].created_at))
+//   threeColRef.value = arr
+//   leftRef.value = left
+//   rightRef.value = right
+// })
 
 // 跳转到公共服务
 const toPublicService = (info) => {

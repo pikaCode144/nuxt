@@ -1,16 +1,19 @@
 <script setup>
 import Banner from '@/components/Banner/index.vue'
-import { tagPagesAPI } from '@/utils/posts'
+import { tagPagesAPI, fetchGhostPages } from '@/utils/posts'
 
 const route = useRoute()
 const { tag } = route.query
 // 信息
 const info = ref([])
 
-onMounted(async () => {
-  const pages = await tagPagesAPI(tag)
-  info.value = pages
-})
+const pages = await fetchGhostPages(tag)
+info.value = pages.data.value.pages
+
+// onMounted(async () => {
+//   const pages = await fetchGhostPages(tag)
+//   info.value = pages
+// })
 
 </script>
 

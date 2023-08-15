@@ -1,14 +1,21 @@
 <script setup>
-import { navBarsAPI, tagPostsAPI } from '@/utils/posts'
+import { navBarsAPI, tagPostsAPI, fetchGhostPosts } from '@/utils/posts'
 // 获取导航栏数据
 const navBarsRef = ref([])
-onMounted(async () => {
-  const posts = await tagPostsAPI('nav-bars')
-  navBarsRef.value = posts.map((post) => {
-    const bar = post.title.split('/').map((str) => str.split('+'))
-    return bar
-  })
+
+const posts = await fetchGhostPosts('nav-bars')
+navBarsRef.value = posts.data.value.posts.map((post) => {
+  const bar = post.title.split('/').map((str) => str.split('+'))
+  return bar
 })
+
+// onMounted(async () => {
+//   const posts = await tagPostsAPI('nav-bars')
+//   navBarsRef.value = posts.map((post) => {
+//     const bar = post.title.split('/').map((str) => str.split('+'))
+//     return bar
+//   })
+// })
 
 const router = useRouter()
 const toHome = () => router.push({ path: '/' })

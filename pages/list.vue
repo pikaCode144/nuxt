@@ -1,6 +1,6 @@
 <script setup>
 import Banner from '@/components/Banner'
-import { tagPostsAPI } from '@/utils/posts'
+import { tagPostsAPI, fetchGhostPosts } from '@/utils/posts'
 import { formatDate } from '@/utils/format'
 
 const router = useRouter()
@@ -13,17 +13,27 @@ const nameRef = ref(name)
 const asideDataRef = ref([])
 // 右边的列表
 const listDataRef = ref([])
-onMounted(async () => {
-  const [navBars, posts] = await Promise.all([
-    tagPostsAPI('nav-bars'),
-    tagPostsAPI(tag),
-  ])
-  asideDataRef.value = navBars
-    .map((item) => item.title.split('/'))
-    .filter((item) => item.includes(title))[0]
-    .map((str) => str.split('+'))
-  listDataRef.value = posts
-})
+
+const [navBars, posts] = await Promise.all([
+  fetchGhostPosts('nav-bars'),
+  fetchGhostPosts(tag),
+])
+asideDataRef.value = navBars.data.value.posts
+  .map((item) => item.title.split('/'))
+  .filter((item) => item.includes(title))[0]
+  .map((str) => str.split('+'))
+listDataRef.value = posts.data.value.posts
+// onMounted(async () => {
+//   const [navBars, posts] = await Promise.all([
+//     tagPostsAPI('nav-bars'),
+//     tagPostsAPI(tag),
+//   ])
+//   asideDataRef.value = navBars
+//     .map((item) => item.title.split('/'))
+//     .filter((item) => item.includes(title))[0]
+//     .map((str) => str.split('+'))
+//   listDataRef.value = posts
+// })
 
 const toDetail = (id) => {
   router.push({ path: '/detail', query: { id } })
@@ -31,8 +41,8 @@ const toDetail = (id) => {
 
 const changeName = async (info) => {
   nameRef.value = info[0]
-  const pages = await tagPostsAPI(info[1])
-  listDataRef.value = pages
+  const pages = await fetchGhostPosts(info[1])
+  listDataRef.value = pages.data.value.posts
 }
 </script>
 

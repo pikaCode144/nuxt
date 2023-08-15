@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     appKey: 'aabbcc',
     public: {
-      baseURL: 'http://qidian.cn'
+      baseURL: 'https://scrfmu.org.cn/'
     }
   },
   app: {

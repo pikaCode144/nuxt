@@ -1,11 +1,14 @@
 <script setup>
-import { carouselAPI } from '@/utils/posts'
+import { carouselAPI, fetchGhostPosts } from '@/utils/posts'
 // 获取轮播图的数据
 const carouselRef = ref([])
-onMounted(async () => {
-  const posts = await carouselAPI()
-  carouselRef.value = posts.map((post) => post.title)
-})
+
+const posts = await fetchGhostPosts('carousel')
+carouselRef.value = posts.data.value.posts.map((post) => post.title)
+// onMounted(async () => {
+//   const posts = await carouselAPI()
+//   carouselRef.value = posts.map((post) => post.title)
+// })
 
 </script>
 

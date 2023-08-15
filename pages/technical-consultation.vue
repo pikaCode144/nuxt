@@ -1,18 +1,21 @@
 <script setup>
-import { tagPagesAPI } from '@/utils/posts'
+import Banner from '@/components/Banner/index.vue'
+import { tagPagesAPI, fetchGhostPages } from '@/utils/posts'
 
 const route = useRoute()
 const { tag } = route.query
 // 信息
 const info = ref([])
 
-onMounted(async () => {
-  const pages = await tagPagesAPI(tag)
-  info.value = pages
-})
+const pages = await fetchGhostPages(tag)
+info.value = pages.data.value.pages
+
+// onMounted(async () => {
+//   const pages = await fetchGhostPages(tag)
+//   info.value = pages
+// })
 
 </script>
-
 <template>
   <v-container class="container">
     <v-row v-if="info.length">

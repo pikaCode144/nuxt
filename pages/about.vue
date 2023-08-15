@@ -1,6 +1,6 @@
 <script setup>
 import Banner from '@/components/Banner'
-import { tagPostsAPI, tagPagesAPI } from '@/utils/posts'
+import { tagPostsAPI, tagPagesAPI, fetchGhostPosts, fetchGhostPages } from '@/utils/posts'
 
 const route = useRoute()
 const { title, name, tag } = route.query
@@ -11,23 +11,35 @@ const nameRef = ref(name)
 const asideDataRef = ref([])
 // 右边的信息
 const rightDataRef = ref([])
-onMounted(async () => {
-  //   const navBars = await tagPostsAPI('nav-bars')
-  const [navBars, pages] = await Promise.all([
-    tagPostsAPI('nav-bars'),
-    tagPagesAPI(tag),
-  ])
-  asideDataRef.value = navBars
-    .map((item) => item.title.split('/'))
-    .filter((item) => item.includes(title))[0]
-    .map((str) => str.split('+'))
-  rightDataRef.value = pages
-})
+
+const [navBars, pages] = await Promise.all([
+  fetchGhostPosts('nav-bars'),
+  fetchGhostPages(tag),
+])
+// console.log(navBars.data.value.posts, pages.data.value.pages)
+asideDataRef.value = navBars.data.value.posts
+  .map((item) => item.title.split('/'))
+  .filter((item) => item.includes(title))[0]
+  .map((str) => str.split('+'))
+rightDataRef.value = pages.data.value.pages
+
+// onMounted(async () => {
+//   //   const navBars = await tagPostsAPI('nav-bars')
+//   const [navBars, pages] = await Promise.all([
+//     tagPostsAPI('nav-bars'),
+//     tagPagesAPI(tag),
+//   ])
+//   asideDataRef.value = navBars
+//     .map((item) => item.title.split('/'))
+//     .filter((item) => item.includes(title))[0]
+//     .map((str) => str.split('+'))
+//   rightDataRef.value = pages
+// })
 
 const changeName = async (info) => {
   nameRef.value = info[0]
-  const pages = await tagPagesAPI(info[1])
-  rightDataRef.value = pages
+  const pages = await fetchGhostPages(info[1])
+  rightDataRef.value = pages.data.value.pages
 }
 </script>
 
