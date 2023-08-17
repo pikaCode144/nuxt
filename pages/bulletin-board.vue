@@ -1,14 +1,16 @@
 <script setup>
+// import Header from '@/components/Header/index.vue'
 import Banner from '@/components/Banner'
 import { tagPostsAPI, fetchGhostPosts } from '@/utils/posts'
 import { formatDate } from '@/utils/format'
 
 const router = useRouter()
 const route = useRoute()
-const { title, name, tag } = route.query
+// const { title, name, tag } = route.query
+const tag = 'bulletin-board'
 
 // 小标题
-const nameRef = ref(name)
+const nameRef = ref('公告栏')
 // 保存侧边栏里的数据
 const asideDataRef = ref([])
 // 右边的列表
@@ -20,9 +22,10 @@ const [navBars, posts] = await Promise.all([
 ])
 asideDataRef.value = navBars.data.value.posts
   .map((item) => item.title.split('/'))
-  .filter((item) => item.includes(title))[0]
+  .filter((item) => item.includes('新闻中心'))[0]
   .map((str) => str.split('+'))
 listDataRef.value = posts.data.value.posts
+console.log(asideDataRef.value)
 // onMounted(async () => {
 //   const [navBars, posts] = await Promise.all([
 //     tagPostsAPI('nav-bars'),
@@ -36,10 +39,12 @@ listDataRef.value = posts.data.value.posts
 // })
 
 const toDetail = (id) => {
+  console.log(id)
   router.push({ path: '/detail', query: { id } })
 }
 
 const changeName = async (info) => {
+  console.log(info)
   nameRef.value = info[0]
   const pages = await fetchGhostPosts(info[1])
   listDataRef.value = pages.data.value.posts
@@ -47,6 +52,7 @@ const changeName = async (info) => {
 </script>
 
 <template>
+  <!-- <Header /> -->
   <Banner />
   <v-container>
     <v-row no-gutters>
@@ -61,10 +67,11 @@ const changeName = async (info) => {
             </div>
             <v-list class="item" color="#152f86">
               <template v-for="list in asideDataRef.slice(1)" :key="list[1]">
-                <v-list-item
-                  :active="nameRef === list[0]"
-                  :title="list[0]"
-                  @click="changeName(list)"></v-list-item>
+                <NuxtLink :to="list[1]" :external="true">
+                  <v-list-item
+                    :active="nameRef === list[0]"
+                    :title="list[0]"></v-list-item>
+                </NuxtLink>
               </template>
             </v-list>
           </v-card>
@@ -76,13 +83,15 @@ const changeName = async (info) => {
             <div class="subtitle1">{{ nameRef }}</div>
             <div class="vertical-line"></div>
           </div>
-          <div
-            class="list"
-            v-for="item in listDataRef"
-            @click="toDetail(item.id)">
-            <div class="left">{{ formatDate(item.created_at) }}</div>
-            <div class="right">{{ item.title }}</div>
-          </div>
+          <template v-for="item in listDataRef">
+            <NuxtLink
+              :to="`/${item.id}`"
+              :external="true"
+              class="list">
+              <div class="left">{{ formatDate(item.created_at) }}</div>
+              <div class="right">{{ item.title }}</div>
+            </NuxtLink>
+          </template>
         </v-sheet>
       </v-col>
     </v-row>

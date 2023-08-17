@@ -5,11 +5,13 @@ import Footer from '@/components/Footer/index.vue'
 
 <template>
   <div>
-    <v-app style="margin-top: 60px;">
-      <Header />
-      <NuxtPage />
-      <Footer />
-    </v-app>
+    <!-- <client-only> -->
+      <!-- <v-app style="margin-top: 60px"> -->
+        <Header />
+        <NuxtPage />
+        <Footer />
+      <!-- </v-app> -->
+    <!-- </client-only> -->
   </div>
 </template>
 
@@ -21,5 +23,4 @@ import Footer from '@/components/Footer/index.vue'
     flex-direction: column;
   }
 }
-
 </style>

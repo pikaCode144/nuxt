@@ -78,6 +78,49 @@ export const fetchGhostPosts = async (tag, limit = 15) => {
   })
 }
 
+export const asyncDataGhostPosts = async (tag, limit = 15) => {
+  return await useAsyncData('/posts', async () => {
+    return $fetch(`http://127.0.0.1:2368/ghost/api/content/posts`, {
+      method: 'get',
+      server: true,
+      params: {
+        key: 'b31bc1be89ca250e3a0569a030',
+        version: 'v5.58.0',
+        limit,
+        filter: `tag:${tag}`,
+        order: 'published_at DESC'
+      }
+    })
+  })
+}
+
+// export const fetchGhostPosts = async (tag, limit = 15) => {
+//   return await useAsyncData('/posts', async () => {
+//     return $fetch(`${GHOSTURL}/ghost/api/content/posts`, {
+//       method: 'get',
+//       server: true,
+//       params: {
+//         key: GHOSTKEY,
+//         version: GHOSTVERSION,
+//         limit,
+//         filter: `tag:${tag}`,
+//         order: 'published_at DESC'
+//       }
+//     })
+//   })
+//   // useFetch(`${GHOSTURL}/ghost/api/content/posts`, {
+//   //   method: 'get',
+//   //   server: true,
+//   //   params: {
+//   //     key: GHOSTKEY,
+//   //     version: GHOSTVERSION,
+//   //     limit,
+//   //     filter: `tag:${tag}`,
+//   //     order: 'published_at DESC'
+//   //   }
+//   // })
+// }
+
 export const fetchGhostPages = async (tag, limit = 15) => {
   return await useFetch(`${GHOSTURL}/ghost/api/content/pages`, {
     method: 'get',

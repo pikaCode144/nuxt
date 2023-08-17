@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <v-footer color="#fff" fixed dark>
+  <div color="#fff" fixed dark>
     <div class="footer">
       <div class="footer-container">
         <div class="left">
@@ -35,10 +35,10 @@
         </div>
       </div>
     </div>
-  </v-footer>
-  <v-footer color="#3c79b0" fixed dark height="80px" style="display: flex; justify-content: center">
+  </div>
+  <div color="#3c79b0" fixed dark height="80px" style="display: flex; justify-content: center">
     <span>蜀公网安备 31010102006612号</span>
-  </v-footer>
+  </div>
 </template>
 
 <style scoped lang="scss">

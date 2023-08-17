@@ -1,9 +1,10 @@
 <script setup>
+// import Header from '@/components/Header/index.vue'
 import Banner from '@/components/Banner/index.vue'
-import { postInfoAPI, fetchGhostPosts } from '@/utils/posts'
+import { postInfoAPI } from '@/utils/posts'
 
 const route = useRoute()
-const { id } = route.query
+const { id } = route.params
 const detailRef = ref({})
 
 const page = await postInfoAPI(id)
@@ -15,6 +16,7 @@ detailRef.value = page.data.value.posts[0]
 </script>
 
 <template>
+  <!-- <Header /> -->
   <Banner />
   <div class="detail">
     <div class="inner" v-if="detailRef.title" v-html="detailRef.html"></div>

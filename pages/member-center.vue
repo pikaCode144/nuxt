@@ -7,7 +7,7 @@ const { tag } = route.query
 // 信息
 const info = ref([])
 
-const pages = await fetchGhostPages(tag)
+const pages = await fetchGhostPages('member-center')
 info.value = pages.data.value.pages
 
 // onMounted(async () => {

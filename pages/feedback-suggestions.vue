@@ -6,7 +6,7 @@ const route = useRoute()
 const { title, name, tag } = route.query
 
 // 小标题
-const nameRef = ref(name)
+const nameRef = ref('建议反馈')
 // 保存侧边栏里的数据
 const asideDataRef = ref([])
 // 右边的信息
@@ -14,12 +14,12 @@ const rightDataRef = ref([])
 
 const [navBars, pages] = await Promise.all([
   fetchGhostPosts('nav-bars'),
-  fetchGhostPages(tag),
+  fetchGhostPages('feedback-suggestions'),
 ])
 // console.log(navBars.data.value.posts, pages.data.value.pages)
 asideDataRef.value = navBars.data.value.posts
   .map((item) => item.title.split('/'))
-  .filter((item) => item.includes(title))[0]
+  .filter((item) => item.includes('关于我们'))[0]
   .map((str) => str.split('+'))
 rightDataRef.value = pages.data.value.pages
 
@@ -37,6 +37,7 @@ rightDataRef.value = pages.data.value.pages
 // })
 
 const changeName = async (info) => {
+  console.log(info)
   nameRef.value = info[0]
   const pages = await fetchGhostPages(info[1])
   rightDataRef.value = pages.data.value.pages
@@ -58,10 +59,12 @@ const changeName = async (info) => {
             </div>
             <v-list class="item" color="#152f86">
               <template v-for="list in asideDataRef.slice(1)" :key="list[1]">
-                <v-list-item
-                  :active="nameRef === list[0]"
-                  :title="list[0]"
-                  @click="changeName(list)"></v-list-item>
+                <NuxtLink :to="list[1]" :external="true">
+                  <v-list-item
+                    :active="nameRef === list[0]"
+                    :title="list[0]"
+                  ></v-list-item>
+                </NuxtLink>
               </template>
             </v-list>
           </v-card>

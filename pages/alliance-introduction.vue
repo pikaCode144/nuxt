@@ -3,11 +3,11 @@ import Banner from '@/components/Banner/index.vue'
 import { tagPagesAPI, fetchGhostPages } from '@/utils/posts'
 
 const route = useRoute()
-const { tag } = route.query
+// const { tag } = route.query
 // 信息
 const info = ref([])
 
-const pages = await fetchGhostPages(tag)
+const pages = await fetchGhostPages('alliance-introduction')
 info.value = pages.data.value.pages
 
 // onMounted(async () => {

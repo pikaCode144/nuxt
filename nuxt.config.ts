@@ -31,7 +31,7 @@ export default defineNuxtConfig({
   ssr: true,
   router: {
     options: {
-      hashMode: true
+      hashMode: false
     }
   },
   css: ['@/assets/styles/main.css', '@/assets/styles/global.scss'],
@@ -48,6 +48,7 @@ export default defineNuxtConfig({
   vuetify: {
     vuetifyOptions: {
       // @TODO: list all vuetify options
+      ssr: true
     },
     moduleOptions: {
       /* nuxt-vuetify module options */
@@ -55,6 +56,11 @@ export default defineNuxtConfig({
       /* vite-plugin-vuetify options */
       styles: true,
       autoImport: true
+    }
+  },
+  nitro: {
+    prerender: {
+      // routes: ['/detail', '/about', '/list']
     }
   }
 })
